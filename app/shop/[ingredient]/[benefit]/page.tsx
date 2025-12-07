@@ -5,8 +5,8 @@ import { ExternalLink, Sparkles, Heart, Leaf } from 'lucide-react';
 import { getProductMatch, getAllProductPaths } from '@/lib/data';
 import { JsonLd } from '@/components/JsonLd';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
-// 1. UPDATE: Define Props as a Promise
 type Params = Promise<{ ingredient: string; benefit: string }>;
 
 interface PageProps {
@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // 2. UPDATE: Await the params before using them
   const { ingredient, benefit } = await params;
-  
+
   const product = getProductMatch(ingredient, benefit);
 
   if (!product) {
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ProductPage({ params }: PageProps) {
   // 3. UPDATE: Await the params here too
   const { ingredient, benefit } = await params;
-  
+
   const product = getProductMatch(ingredient, benefit);
 
   if (!product) {
@@ -106,11 +106,14 @@ export default async function ProductPage({ params }: PageProps) {
         <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-slate-100 shadow-2xl">
-                <img
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-100 shadow-2xl">
+                <Image
                   src={product.imageUrl}
                   alt={product.productName}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority 
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 bg-emerald-600 text-white rounded-full w-24 h-24 flex items-center justify-center shadow-xl">
